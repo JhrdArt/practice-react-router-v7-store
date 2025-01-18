@@ -57,7 +57,7 @@ export async function postProduct(object: ProductWithoutId ) {
     return data
 }
 
-export async function patchProduct(id: Product["id"], object: Product) {
+export async function patchProduct(id: Product["id"], object: ProductWithoutId) {
     const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
       method: "PATCH",
       body: JSON.stringify(object),
@@ -65,4 +65,10 @@ export async function patchProduct(id: Product["id"], object: Product) {
         "Content-Type": "application/json"
       }
     })
+    if(!response.ok){
+    throw new Error("Internal server error while update");
+      
+    }
+    const data = await response.json();
+    return data
 }

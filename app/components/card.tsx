@@ -1,16 +1,43 @@
-import type { Product } from "~/type";
-import type { Route } from "../routes/products/+types/Products";
 import { Link } from "react-router";
+import Modal from "./modal";
+import { useEffect, useState } from "react";
+import FormPatch from "./forms/form-patch";
+import Products from "~/routes/products/Products";
+import type { Product } from "~/type";
+import { getAllProducts } from "~/services/clientData";
 
 interface Props {
   product: Product;
 }
 
 const Card: React.FC<Props> = ({ product }) => {
+  const [onClose, setOnClose] = useState(false);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+
   const stars = Array.from({ length: Math.floor(product.rating.rate) });
+
+  const fetchProducts = async () => {
+    try {
+      const products = await getAllProducts();
+      setAllProducts(products);
+    } catch (error) {
+      console.error("error fetching products" + error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const categories = Array.from(new Set(allProducts.map((p) => p.category)));
 
   return (
     <div className="w-64 h-96 col-span-1 p-2 border rounded flex flex-col bg-white">
+      <Modal
+        setOnClose={setOnClose}
+        onClose={onClose}
+        children={<FormPatch categories={categories} product={product} />}
+      />
       <Link
         to={`/products/${product.id}/${encodeURIComponent(product.title)}`}
         className="space-y-5"
@@ -41,7 +68,10 @@ const Card: React.FC<Props> = ({ product }) => {
       </Link>
       <div className="flex gap-2 mt-auto">
         <button className="bg-blue-500 p-2 rounded-md mt-auto">Agregar</button>
-        <button className="bg-purple-500  p-2 rounded-md mt-auto">
+        <button
+          className="bg-purple-500  p-2 rounded-md mt-auto"
+          onClick={() => setOnClose(true)}
+        >
           Editar
         </button>
         <button className="bg-red-500  p-2 rounded-md mt-auto">Eliminar</button>
