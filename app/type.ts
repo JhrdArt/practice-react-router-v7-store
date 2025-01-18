@@ -10,3 +10,5 @@ export type Product = {
     title: string,
     price: number
 }
+
+export type ProductWithoutId = Omit<Product, "id" >

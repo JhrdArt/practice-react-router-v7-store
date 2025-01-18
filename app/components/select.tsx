@@ -7,6 +7,8 @@ const Select: React.FC<Props> = ({ selectList, setValue }) => {
   const onChange = (value: string) => {
     setValue(value); 
   };
+
+
   return (
     <select onChange={(e) => onChange(e.target.value)}>
       <option value="">selecciona</option>

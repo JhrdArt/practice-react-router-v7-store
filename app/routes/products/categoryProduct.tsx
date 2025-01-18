@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Card from "~/components/card";
 import Select from "~/components/select";
 import { useNavigate } from "react-router";
+import Loader from "~/components/loader";
 
 interface Props {
   /*Props*/
@@ -22,23 +23,16 @@ const CategoryProduct = ({
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [typeFilter, setTypeFilter] = useState("");
-  console.log("🚀 ~ typeFilter:", typeFilter);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     if (loaderData) {
       setProducts(loaderData);
       setFilteredProducts(loaderData);
     }
+    setLoading(false);
   }, []);
-
-  console.log(products);
-  const selectOptions = [
-    "Mayor precio",
-    "Menor precio",
-    "Nombre A - Z",
-    "Nombre Z - A",
-    "Más populares",
-  ];
 
   useEffect(() => {
     const sortedProducts = [...products];
@@ -58,7 +52,7 @@ const CategoryProduct = ({
       case "Más populares":
         sortedProducts.sort((a, b) => b.rating.rate - a.rating.rate);
         break;
-        default: 
+      default:
         break;
     }
     setFilteredProducts(sortedProducts);
@@ -82,12 +76,25 @@ const CategoryProduct = ({
         </button>
       </div>
 
-      <div className="grid grid-cols-4 gap-5">
-        {filteredProducts.map((product, index) => (
-          <Card key={index} product={product} />
-        ))}
+      <div className="grid grid-cols-6 gap-10">
+        {loading ? (
+          <Loader />
+        ) : (
+          filteredProducts.map((product, index) => (
+            <Card key={index} product={product} />
+          ))
+        )}
       </div>
     </div>
   );
 };
+
 export default CategoryProduct;
+
+const selectOptions = [
+  "Mayor precio",
+  "Menor precio",
+  "Nombre A - Z",
+  "Nombre Z - A",
+  "Más populares",
+];

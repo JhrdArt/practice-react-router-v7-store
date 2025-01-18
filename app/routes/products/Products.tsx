@@ -10,6 +10,8 @@ import {
   getProductByCategory,
   getProductsWithLimit,
 } from "~/services/clientData";
+import Modal from "~/components/modal";
+import FormAdd from "~/components/forms/form-add";
 
 export const HydrateFallBack = () => {
   return <div>Loading...</div>;
@@ -20,6 +22,8 @@ const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [limit, setLimit] = useState(4);
   const [loading, setLoading] = useState(false);
+  const [onClose, setOnClose] = useState(false);
+
   const navigate = useNavigate();
 
   const loadProducts = async () => {
@@ -65,12 +69,25 @@ const Products = () => {
 
   return (
     <div className="w-full h-full space-y-10 relative">
-      <button
-        className="bg-white text-black p-2 rounded"
-        onClick={() => navigate("/")}
-      >
-        Home
-      </button>
+      <Modal
+        onClose={onClose}
+        setOnClose={setOnClose}
+        children={<FormAdd categories={uniqueCategories} />}
+      />
+      <div className="space-x-4">
+        <button
+          className="bg-white text-black p-2 rounded"
+          onClick={() => navigate("/")}
+        >
+          Home
+        </button>
+        <button
+          onClick={() => setOnClose(true)}
+          className="bg-blue-600 p-2 rounded hover:bg-blue-600/90"
+        >
+          Añadir
+        </button>
+      </div>
       <h2>Aquí se muestran los productos</h2>
 
       <div className="flex gap-5 flex-col pl-4">
@@ -88,7 +105,7 @@ const Products = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 w-full ">
+      <div className="grid grid-cols-4 w-full gap-y-20 gap-x-10 place-content-center place-items-center">
         {loading ? (
           <Loader />
         ) : (

@@ -1,4 +1,4 @@
-import type { Product } from "~/type";
+import type { Product, ProductWithoutId } from "~/type";
 
 export async function getAllProducts(): Promise<Product[]> {
   const response = await fetch(
@@ -39,4 +39,30 @@ export async function getProductByCategory(category: string) {
   }
   const data = response.json();
   return data
+}
+
+export async function postProduct(object: ProductWithoutId ) {
+    const response = await fetch("https://fakestoreapi.com/products", {
+      method: "POST",
+      body: JSON.stringify(object),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    if(!response.ok){
+    throw new Error("Internal server error while post");
+    }
+    const data  = response.json();
+
+    return data
+}
+
+export async function patchProduct(id: Product["id"], object: Product) {
+    const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(object),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
 }

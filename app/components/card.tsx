@@ -30,14 +30,22 @@ const Card: React.FC<Props> = ({ product }) => {
             alt={product.title}
           />
         </div>
-        <div>{stars.map((_, i) => <span key={i}>"⭐"</span> )}</div>
+        <div>
+          {stars.map((_, i) => (
+            <span key={i}>"⭐"</span>
+          ))}
+        </div>
         <p className="text-black before:content-['$'] font-bold text-xl">
           {product.price}
         </p>
       </Link>
-      <button className="bg-blue-500 w-full p-2 rounded-md mt-auto">
-        Agregar al carro
-      </button>
+      <div className="flex gap-2 mt-auto">
+        <button className="bg-blue-500 p-2 rounded-md mt-auto">Agregar</button>
+        <button className="bg-purple-500  p-2 rounded-md mt-auto">
+          Editar
+        </button>
+        <button className="bg-red-500  p-2 rounded-md mt-auto">Eliminar</button>
+      </div>
     </div>
   );
 };

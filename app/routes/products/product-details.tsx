@@ -3,6 +3,7 @@ import type { Route } from "./+types/Products";
 import type { Product } from "~/type";
 import { useLocation, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
+import Loader from "~/components/loader";
 
 interface Props {
   /*Props*/
@@ -18,13 +19,14 @@ export async function loader({ params }: Route.LoaderArgs) {
 const ProductDetails = ({
   loaderData,
 }: Route.ComponentProps & { loaderData: Product }) => {
+  if (!loaderData) {
+    return <Loader />;
+  }
+
   const navigate = useNavigate();
+  console.log(loaderData);
   const { category, description, id, image, price, rating, title } =
     loaderData as Product;
-
-  if (!loaderData) {
-    return <div>Cargando...</div>;
-  }
 
   const handleBack = () => {
     navigate("/products");
